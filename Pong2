@@ -1,7 +1,3 @@
-###################################################
-# python 3.4.1
-# Description: The pong player 2
-###################################################
 import pygame, sys, time, random
 from pygame.locals import *
 
@@ -9,16 +5,16 @@ from pygame.locals import *
 pygame.init()
 
 
-WINDOWWIDTH = 550
-WINDOWHEIGHT = 400
-windowSurface = pygame.display.set_mode((WINDOWWIDTH, WINDOWHEIGHT), 0, 32)
+width = 550
+height = 400
+window = pygame.display.set_mode((width, height), 0, 32)
 pygame.display.set_caption('pong 2 player')
 
 
-DOWNLEFT = 1
-DOWNRIGHT = 3
-UPLEFT = 7
-UPRIGHT = 9
+downleft = 1
+downright = 3
+upleft = 7
+upright = 9
 
 dirs = [1,3,7,9]
 
@@ -26,137 +22,132 @@ moveUp = False
 moveDown = False
 moveUp1 = False
 moveDown1 = False
-MOVESPEED = 5
+movespeed = 5
         
 
-BLACK = (0, 0,0)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (94,0,187)
-WHITE = (255, 255, 255)
-BACKGROUND=(153,217,234)
+black = (0, 0,0)
+blue = (94,0,187)
+background=(153,217,234)
 
 
-block = {'rect':pygame.Rect(275, 200, 50, 50), 'color':BLUE, 'dir':dirs[random.randint(0,3)]}
+block = {'rect':pygame.Rect(275, 200, 50, 50), 'color':blue, 'dir':dirs[random.randint(0,3)]}
 p1 = pygame.Rect(520, 160, 10, 100)
 p2 = pygame.Rect(20, 160, 10, 100)
 players = [p1,p2]
 
 
-PLAYER1 = 0
-PLAYER2 = 0
+player1 = 0
+player2 = 0
 
 font = pygame.font.SysFont('Impact 123',30)
 
-def drawText(text, font, surface, x, y):
-    textobj = font.render(text, 1, BLACK)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
+def printingCover(t, font, surface, x, y):
+    set1 = font.render(t, 1, black)
+    set2 = set1.get_rect()
+    set2.topleft = (x, y)
+    surface.blit(set1, set2)
 
 
 while True:
-    for event in pygame.event.get():
-        if event.type == QUIT:
+    for k in pygame.k.get():
+        if k.type == QUIT:
             pygame.quit()
             sys.exit()
-        if event.type == KEYDOWN:
-            if event.key == K_UP:
+        if k.type == KEYDOWN:
+            if k.key == K_UP:
                 moveDown = False
                 moveUp = True
-            if event.key == ord('w'):
+            if k.key == ord('w'):
                 moveDown1 = False
                 moveUp1 = True
-            if event.key == K_DOWN:
+            if k.key == K_DOWN:
                 moveUp = False
                 moveDown = True
-            if event.key == ord('s'):
+            if k.key == ord('s'):
                 moveUp1 = False
                 moveDown1 = True
-        if event.type == KEYUP:
-            if event.key == K_ESCAPE:
+        if k.type == KEYUP:
+            if k.key == K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-            if event.key == K_UP:
+            if k.key == K_UP:
                 moveUp = False
-            if event.key == ord('w'):
+            if k.key == ord('w'):
                 moveUp1 = False
-            if event.key == K_DOWN:
+            if k.key == K_DOWN:
                 moveDown = False
-            if event.key == ord('s'):
+            if k.key == ord('s'):
                 moveDown1 = False
 
         if block['rect'].right > 550:
-            PLAYER1 += 1
+            player1 += 1
             block['rect'] = pygame.Rect(275, 200, 50, 50)
 
         if block['rect'].left < 0:
-            PLAYER2 += 1
+            player2 += 1
             block['rect'] = pygame.Rect(275, 200, 50, 50)
             
 
-    windowSurface.fill(BACKGROUND)
+    window.fill(background)
 
-    pygame.draw.line(windowSurface, BLACK, (0, 0), (550, 0), 9)
-    pygame.draw.line(windowSurface, BLACK, (0,400), (550,400), 9)
-    drawText('player 1', font, windowSurface, 20, 20)
-    drawText('score: %s' % (PLAYER1), font, windowSurface, 20, 50)
-    drawText('player 2', font, windowSurface, 310, 20)
-    drawText('score: %s' % (PLAYER2), font, windowSurface, 310, 50)
+    pygame.draw.line(window, black, (0, 0), (550, 0), 9)
+    pygame.draw.line(window, black, (0,400), (550,400), 9)
+    printingCover('player 1', font, window, 20, 20)
+    printingCover('score: %s' % (player1), font, window, 20, 50)
+    printingCover('player 2', font, window, 310, 20)
+    printingCover('score: %s' % (player2), font, window, 310, 50)
 
     for i in players:
-        pygame.draw.rect(windowSurface, BLUE, i)
+        pygame.draw.rect(window, blue, i)
 
-    if moveDown and p1.bottom < WINDOWHEIGHT:
-        p1.top += MOVESPEED+2
+    if moveDown and p1.bottom < height:
+        p1.top += movespeed+2
     if moveUp and p1.top > 0:
-        p1.top -= MOVESPEED+2
-    if moveDown1 and p2.bottom < WINDOWHEIGHT:
-        p2.top += MOVESPEED+2
+        p1.top -= movespeed+2
+    if moveDown1 and p2.bottom < height:
+        p2.top += movespeed+2
     if moveUp1 and p2.top > 0:
-        p2.top -= MOVESPEED+2
+        p2.top -= movespeed+2
 
-    if block['dir'] == DOWNLEFT:
-        block['rect'].left -= MOVESPEED
-        block['rect'].top += MOVESPEED
-    if block['dir'] == DOWNRIGHT:
-        block['rect'].left += MOVESPEED
-        block['rect'].top += MOVESPEED
-    if block['dir'] == UPLEFT:
-        block['rect'].left -= MOVESPEED
-        block['rect'].top -= MOVESPEED
-    if block['dir'] == UPRIGHT:
-        block['rect'].left += MOVESPEED
-        block['rect'].top -= MOVESPEED
+    if block['dir'] == downleft:
+        block['rect'].left -= movespeed
+        block['rect'].top += movespeed
+    if block['dir'] == downright:
+        block['rect'].left += movespeed
+        block['rect'].top += movespeed
+    if block['dir'] == upleft:
+        block['rect'].left -= movespeed
+        block['rect'].top -= movespeed
+    if block['dir'] == upright:
+        block['rect'].left += movespeed
+        block['rect'].top -= movespeed
 
     if block['rect'].top < 0:
-        if block['dir'] == UPLEFT:
-            block['dir'] = DOWNLEFT
-        if block['dir'] == UPRIGHT:
-            block['dir'] = DOWNRIGHT
-    if block['rect'].bottom > WINDOWHEIGHT:
-        if block['dir'] == DOWNLEFT:
-            block['dir'] = UPLEFT
-        if block['dir'] == DOWNRIGHT:
-            block['dir'] = UPRIGHT
+        if block['dir'] == upleft:
+            block['dir'] = downleft
+        if block['dir'] == upright:
+            block['dir'] = downright
+    if block['rect'].bottom > height:
+        if block['dir'] == downleft:
+            block['dir'] = upleft
+        if block['dir'] == downright:
+            block['dir'] = upright
 
     for i in players:
         if i.colliderect(block['rect']):
             if block['rect'].right > 520:
-                if block['dir'] == DOWNRIGHT:
-                    block['dir'] = DOWNLEFT
-                if block['dir'] == UPRIGHT:
-                    block['dir'] = UPLEFT
+                if block['dir'] == downright:
+                    block['dir'] = downleft
+                if block['dir'] == upright:
+                    block['dir'] = upleft
             if block['rect'].left < 30:
-                if block['dir'] == DOWNLEFT:
-                    block['dir'] = DOWNRIGHT
-                if block['dir'] == UPLEFT:
-                    block['dir'] = UPRIGHT
+                if block['dir'] == downleft:
+                    block['dir'] = downright
+                if block['dir'] == upleft:
+                    block['dir'] = upright
     
-    # draw the block onto the surface
-    pygame.draw.rect(windowSurface, block['color'], block['rect'])
 
-    # draw the window onto the screen
+    pygame.draw.rect(window, block['color'], block['rect'])
+
     pygame.display.update()
     time.sleep(0.02)
-
